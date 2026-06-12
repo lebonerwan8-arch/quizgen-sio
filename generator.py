@@ -1,7 +1,8 @@
 import os
 import json
 from groq import Groq
-
+from dotenv import load_dotenv
+load_dotenv()
 
 def generate_quiz(course_text: str, num_questions: int = 5) -> list[dict]:
     """
