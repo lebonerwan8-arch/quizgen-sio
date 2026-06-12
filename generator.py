@@ -1,10 +1,11 @@
-import anthropic
+import os
 import json
+from groq import Groq
 
 
 def generate_quiz(course_text: str, num_questions: int = 5) -> list[dict]:
     """
-    Génère un QCM à partir d'un texte de cours via l'API Claude.
+    Génère un QCM à partir d'un texte de cours via l'API Groq.
 
     Args:
         course_text: Le texte du cours à transformer en quiz
@@ -13,7 +14,7 @@ def generate_quiz(course_text: str, num_questions: int = 5) -> list[dict]:
     Returns:
         Liste de questions avec choix et réponse correcte
     """
-    client = anthropic.Anthropic()
+    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
     prompt = f"""Tu es un professeur expert en BTS SIO (Services Informatiques aux Organisations).
 À partir du texte de cours suivant, génère exactement {num_questions} questions QCM (Questionnaire à Choix Multiples).
@@ -43,13 +44,13 @@ Réponds UNIQUEMENT avec un JSON valide, sans texte avant ou après, dans ce for
   }}
 ]"""
 
-    message = client.messages.create(
-        model="claude-sonnet-4-6",
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
         max_tokens=1000,
         messages=[{"role": "user", "content": prompt}],
     )
 
-    response_text = message.content[0].text.strip()
+    response_text = response.choices[0].message.content.strip()
 
     # Nettoyer les éventuels backticks markdown
     if response_text.startswith("```"):
