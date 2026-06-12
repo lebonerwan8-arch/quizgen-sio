@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}QuizGen SIO{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-logo">🎓 QuizGen SIO</a>
+      <div class="nav-links">
+        <a href="{{ url_for('index') }}">Nouveau quiz</a>
+        <a href="{{ url_for('history') }}">Historique</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>Projet BTS SIO SLAM — Propulsé par l'IA Groq</p>
+  </footer>
+</body>
+</html>

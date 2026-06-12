@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Résultats — {{ score }}/{{ total }}{% endblock %}
+
+{% block content %}
+<div class="results-hero">
+  <div class="score-circle {% if percentage >= 80 %}score-great{% elif percentage >= 60 %}score-good{% else %}score-low{% endif %}">
+    <span class="score-number">{{ percentage }}%</span>
+    <span class="score-label">{{ score }}/{{ total }}</span>
+  </div>
+
+  <h2>
+    {% if percentage >= 80 %}🌟 Excellent !
+    {% elif percentage >= 60 %}👍 Bien joué !
+    {% elif percentage >= 40 %}📚 Continue à réviser
+    {% else %}💪 Ne lâche pas !
+    {% endif %}
+  </h2>
+  <p class="topic-label">Sujet : <strong>{{ topic }}</strong></p>
+</div>
+
+<div class="card">
+  <h3>Détail des réponses</h3>
+  {% for answer in answers %}
+  <div class="answer-row {% if answer.is_correct %}answer-correct{% else %}answer-wrong{% endif %}">
+    <div class="answer-icon">{% if answer.is_correct %}✅{% else %}❌{% endif %}</div>
+    <div class="answer-body">
+      <p class="answer-question">{{ answer.question }}</p>
+      {% if not answer.is_correct %}
+      <p class="answer-detail">
+        Ta réponse : <strong>{{ answer.user_answer }}</strong> —
+        Bonne réponse : <strong>{{ answer.correct_answer }}</strong> — {{ answer.choices[answer.correct_answer] }}
+      </p>
+      {% endif %}
+      <p class="answer-explanation">💡 {{ answer.explanation }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="results-actions">
+  <a href="{{ url_for('index') }}" class="btn btn-primary">🔄 Nouveau quiz</a>
+  <a href="{{ url_for('history') }}" class="btn btn-secondary">📊 Voir l'historique</a>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Question {{ number }}/{{ total }}{% endblock %}
+
+{% block content %}
+<div class="progress-bar-wrap">
+  <div class="progress-bar" style="width: {{ (number / total * 100)|int }}%"></div>
+</div>
+
+<div class="quiz-header">
+  <span class="badge">Question {{ number }} / {{ total }}</span>
+</div>
+
+{% if feedback %}
+<div class="card feedback-card {% if feedback.is_correct %}feedback-correct{% else %}feedback-wrong{% endif %}">
+  <p class="feedback-title">
+    {% if feedback.is_correct %}✅ Bonne réponse !{% else %}❌ Mauvaise réponse{% endif %}
+  </p>
+  {% if not feedback.is_correct %}
+  <p>La bonne réponse était <strong>{{ feedback.correct_answer }}</strong> — {{ feedback.correct_text }}</p>
+  {% endif %}
+  <p class="explanation">💡 {{ feedback.explanation }}</p>
+  <form method="GET" action="{{ url_for('quiz') }}">
+    <button type="submit" class="btn btn-primary">Question suivante →</button>
+  </form>
+</div>
+
+{% else %}
+<div class="card question-card">
+  <p class="question-text">{{ question.question }}</p>
+
+  <form method="POST" action="{{ url_for('quiz') }}">
+    <div class="choices">
+      {% for letter, text in question.choices.items() %}
+      <label class="choice-label">
+        <input type="radio" name="answer" value="{{ letter }}" required />
+        <span class="choice-key">{{ letter }}</span>
+        <span class="choice-text">{{ text }}</span>
+      </label>
+      {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Valider ma réponse</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

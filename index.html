@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}QuizGen SIO — Accueil{% endblock %}
+
+{% block content %}
+<div class="hero">
+  <h1>Transforme ton cours en quiz IA</h1>
+  <p class="subtitle">Colle n'importe quel texte de cours, l'IA génère un QCM interactif pour réviser ton BTS SIO.</p>
+</div>
+
+<div class="card form-card">
+  {% if error %}
+  <div class="alert alert-error">{{ error }}</div>
+  {% endif %}
+
+  <form method="POST" action="/">
+    <div class="form-group">
+      <label for="topic">Sujet du cours</label>
+      <input type="text" id="topic" name="topic" placeholder="ex: POO Python, SQL, Réseaux…" required />
+    </div>
+
+    <div class="form-group">
+      <label for="course_text">Texte du cours</label>
+      <textarea id="course_text" name="course_text" rows="10"
+        placeholder="Colle ici ton texte de cours, tes notes, ou un extrait de documentation…" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="num_questions">Nombre de questions : <span id="num-display">5</span></label>
+      <input type="range" id="num_questions" name="num_questions" min="3" max="10" value="5"
+        oninput="document.getElementById('num-display').textContent = this.value" />
+      <div class="range-labels"><span>3</span><span>10</span></div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">⚡ Générer le quiz</button>
+  </form>
+</div>
+{% endblock %}
